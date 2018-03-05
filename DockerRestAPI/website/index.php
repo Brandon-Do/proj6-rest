@@ -4,15 +4,45 @@
     </head>
 
     <body>
-        <h1>List of laptops</h1>
+
+        <h1>Get All Times</h1>
         <ul>
             <?php
-            $json = file_get_contents('http://laptop-service/');
+            $service = 'http://laptop-service/';
+            $field = 'listAll';
+            $format = '/json';
+
+            $json = file_get_contents($service . $field . $format);
             $obj = json_decode($json);
-	          $laptops = $obj->Laptops;
-            foreach ($laptops as $l) {
-                echo "<li>$l</li>";
+
+            $times = array();
+
+            if($field == 'listAll'){
+              array_push($times, $obj->km);
+              array_push($times, $obj->open);
+              array_push($times, $obj->close);
             }
+
+            if($field == 'listOpenOnly'){
+              array_push($times, $obj->open);
+            }
+
+            if($field == 'listCloseOnly'){
+              array_push($times, $obj->close);
+            }
+
+            $amt_fields = count($times);
+            $amt_data = count($times[0]);
+
+            for ($i=0; $i<$amt_data; $i++){
+              $out = "";
+              for ($j=0; $j<$amt_fields; $j++){
+                $out = $out." ".$times[$j][$i];
+              }
+              echo "<li> $out </li>";
+            }
+
+
             ?>
         </ul>
     </body>

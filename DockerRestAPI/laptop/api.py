@@ -28,7 +28,6 @@ def retrieve_json(top = DEFAULT_TOP, fields = ["km", "open", "close"]):
         if top == 0:
             break
         top -= 1
-
         for field in fields:
             results[field].append(d[field])
 
